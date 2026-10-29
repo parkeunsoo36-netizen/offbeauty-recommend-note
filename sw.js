@@ -1,5 +1,5 @@
 // 새 데이터가 있으면 네트워크에서 받고, 오프라인이면 마지막으로 받은 화면을 보여줌
-const C = 'ob-20261020f';
+const C = 'ob-20261030';
 self.addEventListener('install', e => { self.skipWaiting(); e.waitUntil(caches.open(C).then(c => c.addAll(['./', 'manifest.json', 'icon-192.png', 'icon-512.png']))); });
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', e => {
