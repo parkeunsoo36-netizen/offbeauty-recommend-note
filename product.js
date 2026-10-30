@@ -50,7 +50,7 @@ const Product = (() => {
     const price = p.price ? ` · ${p.price.toLocaleString("ko-KR")}원` : "";
     return `<div class="tabs">${tab("ko", "한국어")}${tab("en", "English")}</div>
       <p class="sub">📍 ${esc(p.loc.badge)}${p.loc.tier ? ` ${p.loc.tier}단` : ""}${price}</p><h3>${esc(p.name)}</h3>
-      ${fit(p, st)}${Sheet.lang === "en" ? en(p, ids, st) : ko(p, ids, st)}`;
+      ${fit(p, st)}${Sheet.lang === "en" ? en(p, ids, st) : ko(p, ids, st)}${Log.box(p)}`;
   }
 
   return { html };

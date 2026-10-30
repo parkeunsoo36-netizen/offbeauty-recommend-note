@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="style.css">
 <header class="top">
   <div class="wrap">
-    <h1><span>오프뷰티 1F</span> <b id="title">추천 찾기</b></h1>
+    <div class="head"><button type="button" id="back" class="backbtn" data-act="back" aria-label="뒤로" hidden>‹ 뒤로</button><h1><span>오프뷰티 1F</span> <b id="title">추천 찾기</b></h1><button type="button" id="logbtn" class="logbtn" data-act="logs" hidden>기록</button></div>
     <form id="form" role="search">
       <label for="q" class="sr">손님 말 그대로 검색</label>
       <input id="q" type="search" autocomplete="off" placeholder="손님 말 그대로 (예: 여드름 지성)">
@@ -54,6 +54,7 @@
     <div id="sheetbody"></div>
   </div>
 </div>
+<div id="lconfirm"></div>
 <script src="data.js"></script>
 <script src="query.js"></script>
 <script src="score.js"></script>
@@ -63,6 +64,8 @@
 <script src="trend.js"></script>
 <script src="product.js"></script>
 <script src="dict.js"></script>
+<script src="local.js"></script>
+<script src="log.js"></script>
 <script src="main.js"></script>
 <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body></html>

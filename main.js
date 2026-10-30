@@ -6,8 +6,10 @@
     form: ["크림", "세럼앰플", "토너", "패드", "팩마스크", "선케어", "클렌저"],
     time: ["아침", "밤"],
   };
-  const blank = () => ({ concern: [], skin: [], form: [], time: [], ingredient: [], word: [], country: "", shown: 10 });  // 목록은 10개씩, 더 보기로 10개 더
+  const blank = () => ({ concern: [], skin: [], form: [], time: [], ingredient: [], word: [], country: "", shown: 10, said: [], viaBtn: false });  // said·viaBtn: 구매 기록용 추천 경로  // 목록은 10개씩, 더 보기로 10개 더
   let st = blank(), open = false, tab = "find", sh = null, tc = "", tshown = 10, dshown = 10;
+  const hist = [];  // 뒤로가기: 화면·조건이 바뀌기 전 상태를 쌓아 둔다
+  const SAME = ["say", "more", "tmore", "dmore", "panel", "lang", "back"];  // 화면이 바뀌지 않는 버튼은 안 쌓음
   const $ = id => document.getElementById(id);
   const names = OB.products.map(p => p.name.toLowerCase());
   const count = {};
@@ -41,6 +43,10 @@
     if (tab === "find") renderFind();
     if (tab === "dict") $("dlist").innerHTML = Dict.list($("dq").value, count, dshown);
     if (tab === "trend") $("trend").innerHTML = Trend.page(tc, tshown, count);
+    $("back").hidden = !hist.length;
+    $("lconfirm").innerHTML = Log.dialog();
+    $("logbtn").hidden = !Log.on();
+    $("logbtn").textContent = `기록 ${Log.count()}`;
     $("sheet").hidden = !sh;
     if (sh) $("sheetbody").innerHTML = sheetHtml();
   }
@@ -48,17 +54,31 @@
   function sheetHtml() {
     if (sh.k === "ing") return Sheet.html(sh.v, st.ingredient.includes(sh.v));
     if (sh.k === "prod") return Product.html(sh.v, st);
+    if (sh.k === "log") return Log.page();
     return Trend.sheet(sh.v, count);
   }
 
   function toggle(cat, val) {
     if (cat === "country") st.country = st.country === val ? "" : val;
     else st[cat] = st[cat].includes(val) ? st[cat].filter(v => v !== val) : [...st[cat], val];
-    st.shown = 10;
+    st.shown = 10; st.viaBtn = true;
+  }
+
+  function remember() {
+    hist.push(JSON.stringify({ st, open, tab, sh, tc, tshown, dshown }));
+    if (hist.length > 30) hist.shift();
+  }
+
+  function back() {
+    if (!hist.length) return;
+    ({ st, open, tab, sh, tc, tshown, dshown } = JSON.parse(hist.pop()));
+    Log.clear(); $("hint").textContent = "";
   }
 
   function act(b) {
     const { act: a, cat, val } = b.dataset;
+    if (!SAME.includes(a) && !a.startsWith("log-")) remember();
+    if (a === "back") back();
     if (["toggle", "remove", "reset", "tab"].includes(a)) $("hint").textContent = "";  // 조건·탭이 바뀌면 지난 검색 안내는 지움
     if (a === "toggle") { toggle(cat, val); if (b.closest("#sheet")) { sh = null; tab = "find"; scrollTo(0, 0); } }
     if (a === "remove") cat === "country" ? (st.country = "") : (st[cat] = st[cat].filter(v => v !== val));
@@ -68,7 +88,9 @@
     if (a === "say") return search(b.textContent);
     if (a === "ing") sh = { k: "ing", v: val };
     if (a === "tcard") sh = { k: "trend", v: +val };
-    if (a === "prod") sh = { k: "prod", v: val };
+    if (a === "prod") { sh = { k: "prod", v: val }; Log.clear(); }
+    if (a === "logs") { sh = { k: "log" }; Log.clear(); }
+    if (a.startsWith("log-")) Log.act(a, val, st, sh && sh.v);
     if (a === "lang") Sheet.setLang(val);
     if (a === "close") sh = null;
     if (a === "tab") { tab = val; sh = null; scrollTo(0, 0); }
@@ -79,11 +101,12 @@
   }
 
   function search(text) {
+    remember();
     const { out, found } = Query.parse(text, OB.syn, names);
     const kept = hasCond() ? " 지금 조건은 그대로 뒀어요." : "";
     $("hint").textContent = found ? "" : `"${text}"는 아직 모르는 말이에요. 고민(여드름)·성분(나이아신아마이드)·제형(크림)으로 써 보세요.${kept}`;
     for (const c of Object.keys(out)) out[c].forEach(v => st[c].includes(v) || st[c].push(v));
-    st.shown = 10; tab = "find";
+    st.said.push(text); st.shown = 10; tab = "find";
     render();
   }
 
@@ -99,4 +122,5 @@
     if (q) { search(q); $("q").value = ""; $("q").blur(); }
   });
   render();
+  Log.start(render);
 })();

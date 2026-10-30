@@ -238,3 +238,40 @@ body[data-tab="find"] .pane { background: var(--card); }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 /* 체험판 안내 (깃허브 demo/ 페이지에서만 쓰임) */
 .demo{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:#FFF4E5;color:#8A5300;font-size:12.5px}
+
+/* 구매 기록 (비공개 페이지에서만 보임) */
+.head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.logbtn { border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 700; }
+.logbox { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+.logbox h4, .pane h4 { margin: 14px 0 6px; font-size: 13px; color: var(--muted); }
+.logbox h4 { margin: 0; }
+.pane h4 small { font-weight: 400; color: var(--faint); margin-left: 4px; }
+.lact { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lact button { border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+.lact .lbuy, .lact .lsave { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.lrow { display: flex; align-items: center; gap: 8px; }
+.lrow.wrap { flex-wrap: wrap; gap: 6px; }
+.lrow > span { flex: none; width: 34px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.lrow em { font-style: normal; margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.lrow b { min-width: 24px; text-align: center; font-size: 16px; font-variant-numeric: tabular-nums; }
+.step { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font-size: 18px; }
+.lmsg { margin: 0; font-size: 13px; color: var(--accent-ink); font-weight: 600; }
+.lmsg button { border: 0; background: none; color: var(--muted); text-decoration: underline; font-size: 12px; padding: 0 0 0 6px; }
+.ltab { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.ltab th, .ltab td { padding: 7px 4px; border-bottom: 1px solid var(--line); text-align: right; }
+.ltab th { text-align: left; font-weight: 700; }
+.ltab tr:first-child td, .ltab tr:first-child th { font-size: 11px; color: var(--muted); font-weight: 600; }
+.lrecent { list-style: none; margin: 0; padding: 0; }
+.lrecent li { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 2px 6px; align-items: baseline; }
+.lrecent li span { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.lrecent li b { font-size: 11px; border-radius: 4px; padding: 1px 6px; }
+.lrecent li b.y { background: var(--accent-soft); color: var(--accent-ink); }
+.lrecent li b.n { background: var(--soft); color: var(--muted); }
+.lrecent li small { grid-column: 1 / -1; font-size: 11px; color: var(--muted); }
+.head h1 { margin-right: auto; }
+.backbtn { flex: none; border: 0; background: var(--soft); color: var(--fg); border-radius: 999px; padding: 6px 11px; font-size: 13px; font-weight: 700; }
+.ldim { position: fixed; inset: 0; z-index: 40; background: rgba(0, 0, 0, .45); }
+.lask { position: fixed; z-index: 41; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, calc(100% - 32px)); background: var(--bg); border-radius: 16px; padding: 20px 16px 16px; display: grid; gap: 6px; text-align: center; }
+.lask p { margin: 0; font-size: 16px; }
+.lask .sub { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+body:has(#sheet:not([hidden])) .top { z-index: 31; }  /* 시트가 열려도 뒤로 버튼은 누를 수 있게 */
